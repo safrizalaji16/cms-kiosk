@@ -1,53 +1,97 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Header from "@/components/header";
 
-const LayoutForm = ({ onAdd }) => {
+const LayoutForm = () => {
   const router = useRouter();
   const { id } = router.query;
-  console.log(id, "LALALAL");
-
   const [title, setTitle] = useState("");
   const [code, setCode] = useState("");
   const [deviceId, setDeviceId] = useState("");
+  const [devices, setDevices] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Send a POST request to your API to add the layout
-      const response = await axios.post(`api/layouts`, {
-        title,
-        code,
-        device_id: parseInt(deviceId),
-      });
+      if (Number(id)) {
+        const { data } = await axios.put(`/api/layouts/${id}`, {
+          title,
+          code,
+          device: parseInt(deviceId),
+        });
 
-      // Call the onAdd function passed from the parent component
-      onAdd(response.data);
+        if (data) {
+          console.log(data, "BISANIH");
 
-      // Clear the form fields
-      setTitle("");
-      setCode("");
-      setDeviceId("");
+          setTitle("");
+          setCode("");
+          setDeviceId("");
+          router.push(`/layouts`);
+        }
+      } else {
+        const { data } = await axios.post("/api/layouts", {
+          title,
+          code,
+          device: parseInt(deviceId),
+        });
+
+        if (data) {
+          setTitle("");
+          setCode("");
+          setDeviceId("");
+          router.push(`/layouts`);
+        }
+      }
     } catch (error) {
       console.error("Error adding layout:", error);
     }
   };
 
+  const fetchDevices = async () => {
+    try {
+      const { data } = await axios.get(`/api/devices`);
+
+      setDevices(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchLayout = async () => {
+    try {
+      const { data } = await axios.get(`/api/layouts/${id}`, {
+        params: {
+          populate: ["device"],
+        },
+      });
+
+      setTitle(data.attributes.title);
+      setCode(data.attributes.code[0].children[0].text);
+      setDeviceId(data.attributes.device.data.id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleCancel = (e) => {
     e.preventDefault();
-    // Clear the form fields
     setTitle("");
     setCode("");
     setDeviceId("");
     router.push(`/layouts`);
   };
 
+  useEffect(() => {
+    fetchLayout();
+    fetchDevices();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
-      <main>
+      <main className="mt-6">
         <form
           onSubmit={handleSubmit}
           className="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -93,15 +137,20 @@ const LayoutForm = ({ onAdd }) => {
             >
               Device ID:
             </label>
-            <input
-              type="number"
+            <select
               id="deviceId"
               value={deviceId}
               onChange={(e) => setDeviceId(e.target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Enter device ID"
               required
-            />
+            >
+              <option value="">Select Device ID</option>
+              {devices.map((device) => (
+                <option key={device.id} value={device.id}>
+                  {device.attributes.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <button

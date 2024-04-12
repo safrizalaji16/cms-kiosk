@@ -6,16 +6,18 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { query } = req;
+  const id = req.query.id;
   const { title, code, device } = req.body;
 
   try {
     if (req.method === "GET") {
-      const { data } = await layoutService.getAllLayouts(query);
+      const { data } = await layoutService.getLayout(query, id);
 
       return res.status(200).json(data);
     }
-    if (req.method === "POST") {
+    if (req.method === "PUT") {
       const payload = {
+        id,
         data: {
           title,
           code: [
@@ -33,7 +35,7 @@ export default async function handler(
         },
       };
 
-      await layoutService.createLayout(payload);
+      await layoutService.editLayout(payload);
 
       return res.status(201).json("Success");
     }

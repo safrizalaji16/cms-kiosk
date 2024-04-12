@@ -22,4 +22,55 @@ export const layoutService = {
       throw null;
     }
   },
+  getLayout: async (param: Record<string, unknown>, id: string) => {
+    try {
+      delete param.id;
+      const query = qs.stringify(param, { encodeValuesOnly: true });
+
+      const { data } = (await axios.get(
+        api.layoutsPath(id, query)
+      )) as AxiosResponse<QueryListResponse<Layout>, {}>;
+
+      return data;
+    } catch (e) {
+      console.log((e as AxiosError).request);
+      throw null;
+    }
+  },
+  createLayout: async (payload: {
+    data: {
+      title: string;
+      code: any;
+      device: number;
+    };
+  }) => {
+    try {
+      const response = await axios.post(api.layoutsPath(), payload);
+
+      return response;
+    } catch (e) {
+      console.log((e as AxiosError).request);
+      throw null;
+    }
+  },
+  editLayout: async (payload: {
+    id: string;
+    data: {
+      title: string;
+      code: any;
+      device: number;
+    };
+  }) => {
+    try {
+      const response = await axios.put(
+        api.layoutsPath(payload.id, ""),
+        payload
+      );
+
+      return response;
+    } catch (e) {
+      console.log((e as AxiosError).request);
+      throw null;
+    }
+  },
 };
