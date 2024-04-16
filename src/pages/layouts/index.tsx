@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Header from "@/components/header";
+import { truncateString } from "@/helpers/truncateString";
 
 const Layouts = () => {
   const router = useRouter();
@@ -64,7 +65,7 @@ const Layouts = () => {
                     <tr key={el.id} className="bg-white">
                       <td className="border px-4 py-2">{layout.title}</td>
                       <td className="border px-4 py-2">
-                        {layout.code[0].children[0].text}
+                        {truncateString(layout.code[0].children[0].text, 100)}
                       </td>
                       <td className="border px-4 py-2">
                         {layout.device.data ? layout.device.data.id : ""}

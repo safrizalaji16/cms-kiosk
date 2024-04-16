@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Header from "@/components/header";
+import { addCSSRulesToHTML } from "@/helpers/addCSSRulesToHTML";
 
 const LayoutForm = () => {
   const router = useRouter();
   const { id } = router.query;
   const [title, setTitle] = useState("");
+  const [titleHTML, setTitleHTML] = useState("");
   const [code, setCode] = useState("");
+  const [css, setCss] = useState("");
   const [deviceId, setDeviceId] = useState("");
   const [devices, setDevices] = useState([]);
 
@@ -18,28 +21,30 @@ const LayoutForm = () => {
       if (Number(id)) {
         const { data } = await axios.put(`/api/layouts/${id}`, {
           title,
-          code,
+          code: addCSSRulesToHTML(titleHTML, code, css),
           device: parseInt(deviceId),
         });
 
         if (data) {
-          console.log(data, "BISANIH");
-
           setTitle("");
+          setTitleHTML("");
           setCode("");
+          setCss("");
           setDeviceId("");
           router.push(`/layouts`);
         }
       } else {
         const { data } = await axios.post("/api/layouts", {
           title,
-          code,
+          code: addCSSRulesToHTML(titleHTML, code, css),
           device: parseInt(deviceId),
         });
 
         if (data) {
           setTitle("");
+          setTitleHTML("");
           setCode("");
+          setCss("");
           setDeviceId("");
           router.push(`/layouts`);
         }
@@ -83,6 +88,10 @@ const LayoutForm = () => {
     router.push(`/layouts`);
   };
 
+  const handleCustomHtml = () => {
+    router.push(`/grapejs`);
+  };
+
   useEffect(() => {
     fetchLayout();
     fetchDevices();
@@ -114,16 +123,61 @@ const LayoutForm = () => {
             />
           </div>
           <div className="mb-4">
+            <div className="mb-4">
+              <button
+                type="button"
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                onClick={handleCustomHtml}
+              >
+                Custom HTML
+              </button>
+            </div>
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="titleHTML"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Title HTML:
+            </label>
+            <input
+              type="text"
+              id="titleHTML"
+              value={titleHTML}
+              onChange={(e) => setTitleHTML(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Enter a short title"
+              required
+            />
+          </div>
+          <div className="mb-4">
             <label
               htmlFor="code"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
-              Code:
+              Body HTML:
             </label>
             <textarea
               id="code"
               value={code}
               onChange={(e) => setCode(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Enter a long code"
+              rows={4}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="css"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Css HTML:
+            </label>
+            <textarea
+              id="css"
+              value={css}
+              onChange={(e) => setCss(e.target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               placeholder="Enter a long code"
               rows={4}
