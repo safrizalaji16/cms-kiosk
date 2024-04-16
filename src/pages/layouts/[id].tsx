@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Header from "@/components/header";
 import { addCSSRulesToHTML } from "@/helpers/addCSSRulesToHTML";
+import WebBuilder from "@/components/grapejs/webBuilder";
 
 const LayoutForm = () => {
   const router = useRouter();
@@ -88,10 +89,6 @@ const LayoutForm = () => {
     router.push(`/layouts`);
   };
 
-  const handleCustomHtml = () => {
-    router.push(`/grapejs`);
-  };
-
   useEffect(() => {
     fetchLayout();
     fetchDevices();
@@ -100,10 +97,10 @@ const LayoutForm = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
-      <main className="mt-6">
+      <main className="m-4 flex">
         <form
           onSubmit={handleSubmit}
-          className="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          className="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mr-4"
         >
           <div className="mb-4">
             <label
@@ -121,17 +118,6 @@ const LayoutForm = () => {
               placeholder="Enter a short title"
               required
             />
-          </div>
-          <div className="mb-4">
-            <div className="mb-4">
-              <button
-                type="button"
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                onClick={handleCustomHtml}
-              >
-                Custom HTML
-              </button>
-            </div>
           </div>
           <div className="mb-4">
             <label
@@ -221,6 +207,9 @@ const LayoutForm = () => {
             </button>
           </div>
         </form>
+        <div className="flex-1 mb-4">
+          <WebBuilder />
+        </div>
       </main>
     </div>
   );
