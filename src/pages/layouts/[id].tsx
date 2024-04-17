@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Header from "@/components/header";
 import { addCSSRulesToHTML } from "@/helpers/addCSSRulesToHTML";
 import WebBuilder from "@/components/grapejs/webBuilder";
+import { extractHTML } from "@/helpers/extractHTML";
 
 const LayoutForm = () => {
   const router = useRouter();
@@ -73,8 +74,14 @@ const LayoutForm = () => {
         },
       });
 
+      const { title, body, style } = extractHTML(
+        data.attributes.code[0].children[0].text
+      );
+
       setTitle(data.attributes.title);
-      setCode(data.attributes.code[0].children[0].text);
+      setCode(body);
+      setTitleHTML(title);
+      setCss(style);
       setDeviceId(data.attributes.device.data.id);
     } catch (error) {
       console.log(error);
