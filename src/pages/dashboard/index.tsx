@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "@/components/header";
+import { Device } from "../../../types/entities/Device";
 
 const Dashboard = () => {
-  const [devices, setDevices] = useState([]);
+  const [devices, setDevices] = useState<Device[]>([]);
 
   const fetchDevices = async () => {
     try {
       const { data } = await axios.get(`api/devices`);
-
+      console.log(data);
       setDevices(data);
     } catch (error) {
       console.log(error);
@@ -31,17 +32,38 @@ const Dashboard = () => {
                   <th className="px-4 py-2">Name</th>
                   <th className="px-4 py-2">Location</th>
                   <th className="px-4 py-2">Status</th>
+                  <th className="px-4 py-2">Actions</th>
+                  <th className="px-4 py-2">Last online</th>
+                  <th className="px-4 py-2">Last offline</th>
+                  <th className="px-4 py-2">Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="bg-gray-100 text-center">
                 {devices.map((el) => {
-                  const device = el.attributes;
                   return (
                     <tr key={el.id} className="bg-white">
-                      <td className="border px-4 py-2">{device.name}</td>
-                      <td className="border px-4 py-2">{device.location}</td>
+                      <td className="border px-4 py-2">{el.name}</td>
+                      <td className="border px-4 py-2">{el.locationId}</td>
                       <td className="border px-4 py-2">
-                        {device.status ? "Online" : "Offline"}
+                        {el.status ? "Online" : "Offline"}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {el.activeTemplate ? "Active" : "Inactive"}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {el.lastOnline
+                          ? el.lastOnline.toString()
+                          : "belum pernah online"}
+                      </td>
+                      <td className="border px-4 py-2">
+                        {el.lastOffline
+                          ? el.lastOffline.toString()
+                          : "belum pernah offline"}
+                      </td>
+                      <td className="border px-4 py-2">
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                          Edit
+                        </button>
                       </td>
                     </tr>
                   );

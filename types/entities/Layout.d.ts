@@ -33,8 +33,13 @@ interface LayoutAttributes {
 }
 
 interface Layout {
-  id: number;
-  attributes: LayoutAttributes;
+  id: number,
+  name: string,
+  htmlCode: string,
+  status: boolean,
+  deviceId: string,
+  updatedAt: Date,
+  createdAt: Date
 }
 
 export type Layouts = Layout[];

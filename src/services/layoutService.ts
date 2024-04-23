@@ -8,13 +8,16 @@ import api from "@/constants/api";
 
 export const layoutService = {
   // queries
-  getAllLayouts: async (param: Record<string, unknown>) => {
+  getAllLayouts: async (param: Record<string, unknown>, token?: string) => {
     try {
-      const query = qs.stringify(param, { encodeValuesOnly: true });
 
       const { data } = (await axios.get(
-        api.layoutsPath("", query)
-      )) as AxiosResponse<QueryListResponse<Layout>, {}>;
+        api.layoutsPath(), {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )) as AxiosResponse<QueryListResponse<Layout[]>, {}>;
 
       return data;
     } catch (e) {

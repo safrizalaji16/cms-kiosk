@@ -1,10 +1,21 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { capitalizeFirstLetter } from "@/helpers/capitalizeFirstLetter";
+import axios from "axios";
 
 const Header = () => {
   const router = useRouter();
   const [activeMenu, setActiveMenu] = useState("dashboard");
+
+  const handleLogout = async () => {
+    // TODO: handle logout
+      try {
+        await axios.post("/api/auth/logout");
+        router.push("/auth/login");
+      } catch (error) {
+        console.log(error);
+      }
+  }
 
   useEffect(() => {
     // Mengatur menu aktif berdasarkan path saat ini
@@ -66,6 +77,12 @@ const Header = () => {
               onClick={() => handleMenuClick("contents")}
             >
               Contents
+            </button>
+            <button
+              className="text-gray-900 hover:text-gray-700 focus:outline-none"
+              onClick={handleLogout}
+            >
+              Logout
             </button>
           </nav>
         </div>

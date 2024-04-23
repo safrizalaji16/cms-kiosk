@@ -1,16 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { deviceService } from "@/services/deviceService";
+import { cookieName } from "@/constants/api/config";
+import { NextRequest } from "next/server";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { query } = req;
+  const { query, cookies } = req;
+
+  const currentCookies = cookies[cookieName];
+
+  if (!currentCookies) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
 
   try {
     if (req.method === "GET") {
-      const { data } = await deviceService.getAllDevices(query);
+      const { data } = await deviceService.getAllDevices(query, currentCookies);
 
       return res.status(200).json(data);
     }

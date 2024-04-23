@@ -1,15 +1,14 @@
 export interface Device {
-  id: number;
-  attributes: {
-    name: string;
-    type: string;
-    location: string;
-    installation_date: string; // Perbaikan penulisan
-    createdAt: string;
-    updatedAt: string;
-    androidId: string;
-    status: boolean;
-  };
+  id: string;
+  name: string;
+  status: boolean;
+  activeTemplate: boolean;
+  lastOnline: Date;
+  lastOffline: Date;
+  instalationDate: Date;
+  locationId: number;
+  updatedAt: Date;
+  createdAt: Date;
 }
 
 export type Devices = Device[];

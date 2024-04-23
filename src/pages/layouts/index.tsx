@@ -3,19 +3,16 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Header from "@/components/header";
 import { truncateString } from "@/helpers/truncateString";
+import { Layout } from "../../../types/entities/Layout";
 
 const Layouts = () => {
   const router = useRouter();
-  const [layouts, setLayouts] = useState([]);
+  const [layouts, setLayouts] = useState<Layout[]>([]);
 
   const fetchLayouts = async () => {
     try {
-      const { data } = await axios.get(`api/layouts`, {
-        params: {
-          populate: ["device"],
-        },
-      });
-
+      const { data } = await axios.get(`api/layouts`);
+      console.log(data);
       setLayouts(data);
     } catch (error) {
       console.log(error);
@@ -30,7 +27,7 @@ const Layouts = () => {
     router.push(`/layouts/add`);
   };
 
-  const handleEditLayout = (id: string) => {
+  const handleEditLayout = (id: number) => {
     router.push(`/layouts/${id}`);
   };
 
@@ -60,15 +57,14 @@ const Layouts = () => {
               </thead>
               <tbody>
                 {layouts.map((el) => {
-                  const layout = el.attributes;
                   return (
                     <tr key={el.id} className="bg-white">
-                      <td className="border px-4 py-2">{layout.title}</td>
+                      <td className="border px-4 py-2">{el.name}</td>
                       <td className="border px-4 py-2">
-                        {truncateString(layout.code[0].children[0].text, 100)}
+                        {truncateString(el.htmlCode, 100)}
                       </td>
                       <td className="border px-4 py-2">
-                        {layout.device.data ? layout.device.data.id : ""}
+                        {el.deviceId ? el.deviceId : ""}
                       </td>
                       <td className="border px-4 py-2">
                         <button

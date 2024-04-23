@@ -4,7 +4,7 @@ const nextConfig = {
   swcMinify: true,
   env: {
     baseUrlAPI: "https://kiosk-server.apidev.lol/api",
-    baseUrlAdmin: "https://kiosk-server.apidev.lol/admin",
+    baseUrlAdmin: "https://kiosk-server.apidev.lol/api",
   },
 };
 

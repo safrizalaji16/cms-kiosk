@@ -1,21 +1,21 @@
 // queries
 import type { AxiosError, AxiosResponse } from "axios";
 import type { QueryListResponse } from "../../types/axios/Response";
-import type { Device } from "../../types/entities/Device";
 import axios from "axios";
 import qs from "qs";
 import api from "@/constants/api";
+import { User } from "../../types/entities/user";
 
-export const deviceService = {
+export const authService = {
   // queries
-  getAllDevices: async (param: Record<string, unknown>, token?: string) => {
+  login: async (param: Record<string, unknown>) => {
     try {
-      const { data } = (await axios.get(api.devicesPath(), {
-        headers: {
-          Authorization: `${token}`,
-        },
-      })) as AxiosResponse<QueryListResponse<Device[]>, {}>;
-
+    
+      const { data } = (await axios.post(
+        api.userPath(),{
+          ...param
+        }
+      )) as AxiosResponse<QueryListResponse<User>, {}>;
       return data;
     } catch (e) {
       console.log((e as AxiosError).request);

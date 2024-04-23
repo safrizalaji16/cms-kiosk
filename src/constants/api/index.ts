@@ -1,6 +1,17 @@
 const baseAPI = process.env.baseUrlAPI;
 
 const api = {
+  userPath(endpoint?: string, param?: string) {
+    return `${baseAPI}/users/login${
+      endpoint && param
+        ? `/${endpoint}?${param}`
+        : endpoint
+        ? `/${endpoint}`
+        : param
+        ? `?${param}`
+        : ""
+    }`;
+  },
   devicesPath: (endpoint?: string, param?: string) =>
     `${baseAPI}/devices${
       endpoint && param
@@ -23,8 +34,8 @@ const api = {
         : ""
     }`,
 
-  layoutsPath: (endpoint?: string, param?: string) =>
-    `${baseAPI}/layouts${
+  layoutsPath: (endpoint?: string | number, param?: string ) =>
+    `${baseAPI}/templates${
       endpoint && param
         ? `/${endpoint}?${param}`
         : endpoint
