@@ -36,8 +36,6 @@ export const layoutService = {
     }
   },
   createLayout: async (param: Record<string, unknown>, token: string) => {
-
-    console.log(param, token, "response here");
     try {
       const response = await axios.post(api.layoutsPath(), param, {
         headers: {
@@ -47,25 +45,30 @@ export const layoutService = {
       return response;
     } catch (e) {
       console.log(e);
-      // console.log((e as AxiosError).request);
-      // throw null;
     }
   },
-  editLayout: async (param: Record<string, unknown>, token: string) => {
+  editLayout: async (
+    id: string,
+    param: Record<string, unknown>,
+    token: string
+  ) => {
     try {
-      const response = await axios.put(
-        api.layoutsPath(param.id.toString()),
-        param, {
+      const data = await axios.put<Layout, AxiosResponse<Layout>>(
+        api.layoutsPath(id),
+        param,
+        {
           headers: {
             Authorization: `${token}`,
           },
         }
       );
 
-      return response;
+      console.log(data, "asfasf");
+
+      return data;
     } catch (e) {
-      console.log((e as AxiosError).request);
-      throw null;
+      console.error((e as AxiosError).request);
+      throw e;
     }
   },
 };

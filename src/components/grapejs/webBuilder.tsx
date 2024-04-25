@@ -12,7 +12,7 @@ function WebBuilder({ code }: { code: string }) {
   useEffect(() => {
     const editor = grapesjs.init({
       // selectorManager: { componentFirst: true },
-      height: "100vh",
+      height: "100%",
       storageManager: {
         options: {
           local: {

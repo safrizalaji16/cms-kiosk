@@ -13,8 +13,6 @@ const LayoutForm = () => {
   const [titleHTML, setTitleHTML] = useState("");
   const [code, setCode] = useState("");
   const [css, setCss] = useState("");
-  const [deviceId, setDeviceId] = useState("");
-  const [devices, setDevices] = useState([]);
   const [htmlCode, setHtmlCode] = useState("");
 
   const handleSubmit = async (e) => {
@@ -25,7 +23,6 @@ const LayoutForm = () => {
         const { data } = await axios.put(`/api/layouts/${id}`, {
           name: title,
           htmlCode: addCSSRulesToHTML(titleHTML, code, css),
-          deviceId: deviceId.toString(),
         });
         console.log(data);
         if (data) {
@@ -33,14 +30,12 @@ const LayoutForm = () => {
           setTitleHTML("");
           setCode("");
           setCss("");
-          setDeviceId("");
           router.push(`/layouts`);
         }
       } else {
         const { data } = await axios.post("/api/layouts", {
           title,
           code: addCSSRulesToHTML(titleHTML, code, css),
-          device: parseInt(deviceId),
         });
         console.log(data);
         if (data) {
@@ -48,8 +43,7 @@ const LayoutForm = () => {
           setTitleHTML("");
           setCode("");
           setCss("");
-          setDeviceId("");
-          // router.push(`/layouts`);
+          router.push(`/layouts`);
         }
       }
     } catch (error) {
@@ -57,29 +51,16 @@ const LayoutForm = () => {
     }
   };
 
-  const fetchDevices = async () => {
-    try {
-      const { data } = await axios.get(`/api/devices`);
-
-      setDevices(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const fetchLayout = async (id: string | number) => {
     try {
       const { data } = await axios.get(`/api/layouts/${id}`);
-      const { title, body, style } = extractHTML(
-       data.htmlCode
-      );
-      
+      const { title, body, style } = extractHTML(data.htmlCode);
+
       setHtmlCode(data.htmlCode);
       setTitle(data.name);
       setCode(body);
       setTitleHTML(title);
       setCss(style);
-      setDeviceId(data.deviceId);
     } catch (error) {
       console.log(error);
     }
@@ -89,7 +70,6 @@ const LayoutForm = () => {
     e.preventDefault();
     setTitle("");
     setCode("");
-    setDeviceId("");
     router.push(`/layouts`);
   };
 
@@ -97,7 +77,6 @@ const LayoutForm = () => {
     if (id && id !== "add") {
       fetchLayout(id as string);
     }
-    fetchDevices();
   }, [id]);
 
   return (
@@ -108,20 +87,21 @@ const LayoutForm = () => {
           onSubmit={handleSubmit}
           className="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mr-4"
         >
-      <div>
-        <iframe
-          title="HTML Content"
-          src={`data:text/html;charset=utf-8,${encodeURIComponent(htmlCode)}`}
-          className=" h-[384px] w-[216px]"
-        />
-      </div>
+          <div>
+            <iframe
+              title="HTML Content"
+              src={`data:text/html;charset=utf-8,${encodeURIComponent(
+                htmlCode
+              )}`}
+              className=" h-[384px] w-[216px]"
+            />
+          </div>
           <div className="mb-4">
             <label
               htmlFor="title"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
               Title:
-
             </label>
             <input
               type="text"
@@ -183,28 +163,6 @@ const LayoutForm = () => {
               rows={4}
               required
             />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="deviceId"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              Device ID:
-            </label>
-            <select
-              id="deviceId"
-              value={deviceId}
-              onChange={(e) => setDeviceId(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            >
-              <option value="">Select Device ID</option>
-              {devices.map((device) => (
-                <option key={device.id} value={device.id}>
-                  {device.name}
-                </option>
-              ))}
-            </select>
           </div>
           <div>
             <button

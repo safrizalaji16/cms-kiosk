@@ -48,9 +48,9 @@ const Layouts = () => {
             <table className="table-auto min-w-full">
               <thead>
                 <tr>
+                  <th className="px-4 py-2">ID</th>
                   <th className="px-4 py-2">Title</th>
                   <th className="px-4 py-2">Code</th>
-                  <th className="px-4 py-2">Device ID</th>
                   <th className="px-4 py-2">Actions</th>{" "}
                   {/* Added Actions column */}
                 </tr>
@@ -59,12 +59,10 @@ const Layouts = () => {
                 {layouts.map((el) => {
                   return (
                     <tr key={el.id} className="bg-white">
+                      <td className="border px-4 py-2">{el.id}</td>
                       <td className="border px-4 py-2">{el.name}</td>
                       <td className="border px-4 py-2">
                         {truncateString(el.htmlCode, 100)}
-                      </td>
-                      <td className="border px-4 py-2">
-                        {el.deviceId ? el.deviceId : ""}
                       </td>
                       <td className="border px-4 py-2">
                         <button

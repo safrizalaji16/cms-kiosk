@@ -29,12 +29,13 @@ const Dashboard = () => {
             <table className="table-auto min-w-full">
               <thead>
                 <tr>
+                  <th className="px-4 py-2">ID</th>
                   <th className="px-4 py-2">Name</th>
                   <th className="px-4 py-2">Location</th>
                   <th className="px-4 py-2">Status</th>
-                  <th className="px-4 py-2">Actions</th>
                   <th className="px-4 py-2">Last online</th>
                   <th className="px-4 py-2">Last offline</th>
+                  <th className="px-4 py-2">Template ID</th>
                   <th className="px-4 py-2">Actions</th>
                 </tr>
               </thead>
@@ -42,13 +43,11 @@ const Dashboard = () => {
                 {devices.map((el) => {
                   return (
                     <tr key={el.id} className="bg-white">
+                      <td className="border px-4 py-2">{el.id}</td>
                       <td className="border px-4 py-2">{el.name}</td>
                       <td className="border px-4 py-2">{el.locationId}</td>
                       <td className="border px-4 py-2">
                         {el.status ? "Online" : "Offline"}
-                      </td>
-                      <td className="border px-4 py-2">
-                        {el.activeTemplate ? "Active" : "Inactive"}
                       </td>
                       <td className="border px-4 py-2">
                         {el.lastOnline
@@ -60,6 +59,7 @@ const Dashboard = () => {
                           ? el.lastOffline.toString()
                           : "belum pernah offline"}
                       </td>
+                      <td className="border px-4 py-2">{el.templateId}</td>
                       <td className="border px-4 py-2">
                         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                           Edit
