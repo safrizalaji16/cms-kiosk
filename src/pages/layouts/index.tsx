@@ -12,7 +12,6 @@ const Layouts = () => {
   const fetchLayouts = async () => {
     try {
       const { data } = await axios.get(`api/layouts`);
-      console.log(data);
       setLayouts(data);
     } catch (error) {
       console.log(error);
@@ -49,7 +48,7 @@ const Layouts = () => {
               <thead>
                 <tr>
                   <th className="px-4 py-2">ID</th>
-                  <th className="px-4 py-2">Title</th>
+                  <th className="px-4 py-2">Name</th>
                   <th className="px-4 py-2">Code</th>
                   <th className="px-4 py-2">Actions</th>{" "}
                   {/* Added Actions column */}

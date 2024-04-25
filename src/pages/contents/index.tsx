@@ -11,7 +11,6 @@ const Contents = () => {
   const fetchContents = async () => {
     try {
       const { data } = await axios.get(`/api/contents`);
-      console.log(data);
       setContents(data);
     } catch (error) {
       console.log(error);

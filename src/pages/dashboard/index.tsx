@@ -9,7 +9,6 @@ const Dashboard = () => {
   const fetchDevices = async () => {
     try {
       const { data } = await axios.get(`api/devices`);
-      console.log(data);
       setDevices(data);
     } catch (error) {
       console.log(error);

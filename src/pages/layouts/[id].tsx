@@ -24,7 +24,7 @@ const LayoutForm = () => {
           name: title,
           htmlCode: addCSSRulesToHTML(titleHTML, code, css),
         });
-        console.log(data);
+
         if (data) {
           setTitle("");
           setTitleHTML("");
@@ -34,10 +34,10 @@ const LayoutForm = () => {
         }
       } else {
         const { data } = await axios.post("/api/layouts", {
-          title,
-          code: addCSSRulesToHTML(titleHTML, code, css),
+          name: title,
+          htmlCode: addCSSRulesToHTML(titleHTML, code, css),
         });
-        console.log(data);
+
         if (data) {
           setTitle("");
           setTitleHTML("");

@@ -3,7 +3,6 @@ import type { AxiosError, AxiosResponse } from "axios";
 import type { QueryListResponse } from "../../types/axios/Response";
 import type { Layout } from "../../types/entities/Layout";
 import axios from "axios";
-import qs from "qs";
 import api from "@/constants/api";
 
 export const layoutService = {
@@ -62,8 +61,6 @@ export const layoutService = {
           },
         }
       );
-
-      console.log(data, "asfasf");
 
       return data;
     } catch (e) {
