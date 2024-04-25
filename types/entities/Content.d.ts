@@ -42,16 +42,14 @@ export interface TypeData {
 }
 
 export interface Content {
+  createdAt: Date;
   id: number;
-  attributes: {
-    title: string;
-    createdAt: string;
-    updatedAt: string;
-    link: string | null;
-    asset: AssetData | null;
-    type: TypeData;
-    layout: LayoutData;
-  };
+  templateId: number | null;
+  title: string;
+  type: TypeData;
+  updatedAt: Date;
+  url: string;
+  userId: number;
 }
 
 export type Contents = Content[];

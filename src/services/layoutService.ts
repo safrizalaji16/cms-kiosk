@@ -10,64 +10,56 @@ export const layoutService = {
   // queries
   getAllLayouts: async (param: Record<string, unknown>, token?: string) => {
     try {
+      const { data } = (await axios.get(api.layoutsPath(), {
+        headers: {
+          Authorization: `${token}`,
+        },
+      })) as AxiosResponse<QueryListResponse<Layout[]>, {}>;
 
-      const { data } = (await axios.get(
-        api.layoutsPath(), {
+      return data;
+    } catch (e) {
+      console.log((e as AxiosError).request);
+      throw null;
+    }
+  },
+  getLayout: async (id: string, token: string) => {
+    try {
+      const { data } = (await axios.get(api.layoutsPath(id), {
+        headers: {
+          Authorization: `${token}`,
+        },
+      })) as AxiosResponse<QueryListResponse<Layout>, {}>;
+      return data;
+    } catch (e) {
+      console.log((e as AxiosError).request);
+      throw null;
+    }
+  },
+  createLayout: async (param: Record<string, unknown>, token: string) => {
+
+    console.log(param, token, "response here");
+    try {
+      const response = await axios.post(api.layoutsPath(), param, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+      return response;
+    } catch (e) {
+      console.log(e);
+      // console.log((e as AxiosError).request);
+      // throw null;
+    }
+  },
+  editLayout: async (param: Record<string, unknown>, token: string) => {
+    try {
+      const response = await axios.put(
+        api.layoutsPath(param.id.toString()),
+        param, {
           headers: {
             Authorization: `${token}`,
           },
         }
-      )) as AxiosResponse<QueryListResponse<Layout[]>, {}>;
-
-      return data;
-    } catch (e) {
-      console.log((e as AxiosError).request);
-      throw null;
-    }
-  },
-  getLayout: async (param: Record<string, unknown>, id: string) => {
-    try {
-      delete param.id;
-      const query = qs.stringify(param, { encodeValuesOnly: true });
-
-      const { data } = (await axios.get(
-        api.layoutsPath(id, query)
-      )) as AxiosResponse<QueryListResponse<Layout>, {}>;
-
-      return data;
-    } catch (e) {
-      console.log((e as AxiosError).request);
-      throw null;
-    }
-  },
-  createLayout: async (payload: {
-    data: {
-      title: string;
-      code: any;
-      device: number;
-    };
-  }) => {
-    try {
-      const response = await axios.post(api.layoutsPath(), payload);
-
-      return response;
-    } catch (e) {
-      console.log((e as AxiosError).request);
-      throw null;
-    }
-  },
-  editLayout: async (payload: {
-    id: string;
-    data: {
-      title: string;
-      code: any;
-      device: number;
-    };
-  }) => {
-    try {
-      const response = await axios.put(
-        api.layoutsPath(payload.id, ""),
-        payload
       );
 
       return response;

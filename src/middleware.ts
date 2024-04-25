@@ -1,41 +1,39 @@
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
-
+import { NextRequest, NextResponse } from "next/server";
 import { cookieName } from "./constants/api/config";
 
 export default async function middleware(req: NextRequest) {
   const { url } = req;
 
-  const res = NextResponse.next();
-
-  if (url.includes("/dashboard" || "/layouts" || "/contents")) {
+  if (url.includes("/dashboard") || url.includes("/layouts") || url.includes("/contents")) {
     const userCookie = req.cookies.get(cookieName)?.value;
 
     if (!userCookie) {
-      const redirectUrl = req.nextUrl.clone();
+      const redirectUrl = new URL("/auth/login", req.nextUrl.origin);
+      return NextResponse.redirect(redirectUrl.toString(), { status: 307 });
+    } else {
+      const now = new Date();
+      const expiryTimestamp = now.getTime() + 1800 * 1000;
+      const futureDate = new Date(expiryTimestamp);
 
-      redirectUrl.pathname = "/auth/login";
-      return NextResponse.redirect(redirectUrl, { status: 307 });
+      const res = NextResponse.next();
+
+      res.cookies.set(cookieName, userCookie, {
+        httpOnly: true,
+        path: "/",
+        sameSite: "none",
+        secure: true,
+        expires: futureDate,
+      });
+
+      return res;
     }
-
-    const now = new Date();
-    const expiryTimestamp = now.getTime() + 1800 * 1000;
-    const futureDate = now.setTime(expiryTimestamp);
-
-    res.cookies.set(cookieName, userCookie, {
-      httpOnly: true,
-      path: "/",
-      sameSite: "none",
-      secure: true,
-      expires: futureDate,
-    });
-
-    return res;
   }
 
-  return res;
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!_next|api/auth).*)(.+)"],
+  api: {
+    bodyParser: false,
+  },
 };

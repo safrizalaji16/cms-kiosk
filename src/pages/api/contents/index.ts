@@ -1,15 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { contentService } from "@/services/contentService";
+import { cookieName } from "@/constants/api/config";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { query } = req;
+  const { query, cookies } = req;
+
+  const currentCookies = cookies[cookieName];
 
   try {
     if (req.method === "GET") {
-      const { data } = await contentService.getAllContents(query);
+      const { data } = await contentService.getAllContents(query, currentCookies);
 
       return res.status(200).json(data);
     }

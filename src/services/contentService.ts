@@ -8,13 +8,16 @@ import api from "@/constants/api";
 
 export const contentService = {
   // queries
-  getAllContents: async (param: Record<string, unknown>) => {
+  getAllContents: async (param: Record<string, unknown>, token: string) => {
     try {
-      const query = qs.stringify(param, { encodeValuesOnly: true });
 
       const { data } = (await axios.get(
-        api.contentsPath("", query)
-      )) as AxiosResponse<QueryListResponse<Content>, {}>;
+        api.contentsPath(""), {
+          headers: {
+            Authorization: `${token}`,
+          }
+        }
+      )) as AxiosResponse<QueryListResponse<Content[]>, {}>;
 
       return data;
     } catch (e) {

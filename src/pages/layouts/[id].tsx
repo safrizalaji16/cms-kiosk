@@ -15,6 +15,7 @@ const LayoutForm = () => {
   const [css, setCss] = useState("");
   const [deviceId, setDeviceId] = useState("");
   const [devices, setDevices] = useState([]);
+  const [htmlCode, setHtmlCode] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,11 +23,11 @@ const LayoutForm = () => {
     try {
       if (Number(id)) {
         const { data } = await axios.put(`/api/layouts/${id}`, {
-          title,
-          code: addCSSRulesToHTML(titleHTML, code, css),
-          device: parseInt(deviceId),
+          name: title,
+          htmlCode: addCSSRulesToHTML(titleHTML, code, css),
+          deviceId: deviceId.toString(),
         });
-
+        console.log(data);
         if (data) {
           setTitle("");
           setTitleHTML("");
@@ -41,14 +42,14 @@ const LayoutForm = () => {
           code: addCSSRulesToHTML(titleHTML, code, css),
           device: parseInt(deviceId),
         });
-
+        console.log(data);
         if (data) {
           setTitle("");
           setTitleHTML("");
           setCode("");
           setCss("");
           setDeviceId("");
-          router.push(`/layouts`);
+          // router.push(`/layouts`);
         }
       }
     } catch (error) {
@@ -66,23 +67,19 @@ const LayoutForm = () => {
     }
   };
 
-  const fetchLayout = async () => {
+  const fetchLayout = async (id: string | number) => {
     try {
-      const { data } = await axios.get(`/api/layouts/${id}`, {
-        params: {
-          populate: ["device"],
-        },
-      });
-
+      const { data } = await axios.get(`/api/layouts/${id}`);
       const { title, body, style } = extractHTML(
-        data.attributes.code[0].children[0].text
+       data.htmlCode
       );
-
-      setTitle(data.attributes.title);
+      
+      setHtmlCode(data.htmlCode);
+      setTitle(data.name);
       setCode(body);
       setTitleHTML(title);
       setCss(style);
-      setDeviceId(data.attributes.device.data.id);
+      setDeviceId(data.deviceId);
     } catch (error) {
       console.log(error);
     }
@@ -97,9 +94,11 @@ const LayoutForm = () => {
   };
 
   useEffect(() => {
-    fetchLayout();
+    if (id && id !== "add") {
+      fetchLayout(id as string);
+    }
     fetchDevices();
-  }, []);
+  }, [id]);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -109,12 +108,20 @@ const LayoutForm = () => {
           onSubmit={handleSubmit}
           className="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mr-4"
         >
+      <div>
+        <iframe
+          title="HTML Content"
+          src={`data:text/html;charset=utf-8,${encodeURIComponent(htmlCode)}`}
+          className=" h-[384px] w-[216px]"
+        />
+      </div>
           <div className="mb-4">
             <label
               htmlFor="title"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
               Title:
+
             </label>
             <input
               type="text"
@@ -194,7 +201,7 @@ const LayoutForm = () => {
               <option value="">Select Device ID</option>
               {devices.map((device) => (
                 <option key={device.id} value={device.id}>
-                  {device.attributes.name}
+                  {device.name}
                 </option>
               ))}
             </select>
@@ -215,7 +222,7 @@ const LayoutForm = () => {
           </div>
         </form>
         <div className="flex-1 mb-4">
-          <WebBuilder />
+          <WebBuilder code={htmlCode || ""} />
         </div>
       </main>
     </div>

@@ -6,7 +6,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { query,cookies } = req;
+  const { query, cookies } = req;
   const { title, code, device } = req.body;
 
   const currentCookies = cookies[cookieName];
@@ -14,31 +14,16 @@ export default async function handler(
   try {
     if (req.method === "GET") {
       const { data } = await layoutService.getAllLayouts(query, currentCookies);
-      
       return res.status(200).json(data);
-    }
+    } 
     if (req.method === "POST") {
-      const payload = {
-        data: {
-          title,
-          code: [
-            {
-              type: "code",
-              children: [
-                {
-                  text: code,
-                  type: "text",
-                },
-              ],
-            },
-          ],
-          device,
-        },
-      };
+      console.log("========>", req.body);
+      const response = await layoutService.createLayout(
+        { name: title, htmlCode: code, deviceId: device.toString() },
+        currentCookies
+      );
 
-      await layoutService.createLayout(payload);
-
-      return res.status(201).json("Success");
+      return res.status(201).json(response);
     }
 
     return res.status(405).json("Method not allowed");
