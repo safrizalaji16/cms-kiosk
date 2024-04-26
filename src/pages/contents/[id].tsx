@@ -7,13 +7,13 @@ import { contentService } from "@/services/contentService";
 const ContentForm = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [content, setContent] = useState({});
   const [title, setTitle] = useState("");
+  const [templates, setTemplates] = useState([]);
+  const [templateId, setTemplateId] = useState("");
   const [file, setFile] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(file, title);
 
     try {
       const { data: cookie }: any = await axios.options(
@@ -35,7 +35,7 @@ const ContentForm = () => {
         // }
       } else {
         const data = await contentService.createContent(
-          { name: title, file },
+          { name: title, file, templateId },
           cookie
         );
 
@@ -52,11 +52,20 @@ const ContentForm = () => {
 
   const fetchContent = async (id: string | number) => {
     try {
-      const { data } = await axios.get(`/api/contents/${id}`);
+      const { data } = await axios.get(`/api/templates/${id}`);
 
-      setContent(data);
       setTitle(data.title);
       setFile(data.url);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchTemplates = async () => {
+    try {
+      const { data } = await axios.get(`/api/contents`);
+
+      setTemplates(data);
     } catch (error) {
       console.log(error);
     }
@@ -70,6 +79,7 @@ const ContentForm = () => {
   };
 
   useEffect(() => {
+    fetchTemplates();
     if (id && id !== "add") {
       fetchContent(id as string);
     }
@@ -99,6 +109,27 @@ const ContentForm = () => {
               placeholder="Enter a short name"
               required
             />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="template"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Template:
+            </label>
+            <select
+              id="template"
+              value={templateId}
+              onChange={(e) => setTemplateId(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            >
+              <option value="">-- Pilih Template --</option>
+              {templates.map((t: any) => (
+                <option key={t.id} value={t.id}>
+                  {t.title}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="mb-4">
             <label

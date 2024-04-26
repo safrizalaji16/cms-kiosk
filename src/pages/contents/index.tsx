@@ -3,7 +3,6 @@ import axios from "axios";
 import Header from "@/components/header";
 import { Content } from "../../../types/entities/Content";
 import { FaTrashCan } from "react-icons/fa6";
-import { TfiPencilAlt } from "react-icons/tfi";
 import { useRouter } from "next/router";
 
 const Contents = () => {

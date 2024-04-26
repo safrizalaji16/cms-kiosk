@@ -9,20 +9,21 @@ const Header = () => {
 
   const handleLogout = async () => {
     // TODO: handle logout
-      try {
-        await axios.post("/api/auth/logout");
-        router.push("/auth/login");
-      } catch (error) {
-        console.log(error);
-      }
-  }
+    try {
+      await axios.post("/api/auth/logout");
+      router.push("/auth/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     // Mengatur menu aktif berdasarkan path saat ini
-    const path = router.pathname;
-    if (path === "/dashboard") {
+    const path = router.pathname.split("/")[1];
+
+    if (path === "dashboard") {
       setActiveMenu("dashboard");
-    } else if (path === "/contents") {
+    } else if (path === "contents") {
       setActiveMenu("contents");
     } else {
       setActiveMenu("layouts");
