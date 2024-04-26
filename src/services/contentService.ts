@@ -10,19 +10,66 @@ export const contentService = {
   // queries
   getAllContents: async (param: Record<string, unknown>, token: string) => {
     try {
-
-      const { data } = (await axios.get(
-        api.contentsPath(""), {
-          headers: {
-            Authorization: `${token}`,
-          }
-        }
-      )) as AxiosResponse<QueryListResponse<Content[]>, {}>;
+      const { data } = (await axios.get(api.contentsPath(""), {
+        headers: {
+          Authorization: `${token}`,
+        },
+      })) as AxiosResponse<QueryListResponse<Content[]>, {}>;
 
       return data;
     } catch (e) {
       console.log((e as AxiosError).request);
       throw null;
+    }
+  },
+
+  getContent: async (id: string, token: string) => {
+    try {
+      const { data } = (await axios.get(api.contentsPath(id), {
+        headers: {
+          Authorization: `${token}`,
+        },
+      })) as AxiosResponse<QueryListResponse<Content>, {}>;
+      return data;
+    } catch (e) {
+      console.log((e as AxiosError).request);
+      throw null;
+    }
+  },
+  createContent: async (param: Record<string, unknown>, token: string) => {
+    try {
+      const response = await axios.post(api.contentsPath(), param, {
+        headers: {
+          Authorization: `${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  editContent: async (
+    id: string,
+    param: Record<string, unknown>,
+    token: string
+  ) => {
+    try {
+      const data = await axios.put<Content, AxiosResponse<Content>>(
+        api.contentsPath(id),
+        param,
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
+
+      return data;
+    } catch (e) {
+      console.error((e as AxiosError).request);
+      throw e;
     }
   },
 };

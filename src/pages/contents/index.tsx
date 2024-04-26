@@ -4,8 +4,10 @@ import Header from "@/components/header";
 import { Content } from "../../../types/entities/Content";
 import { FaTrashCan } from "react-icons/fa6";
 import { TfiPencilAlt } from "react-icons/tfi";
+import { useRouter } from "next/router";
 
 const Contents = () => {
+  const router = useRouter();
   const [contents, setContents] = useState<Content[]>([]);
 
   const fetchContents = async () => {
@@ -17,6 +19,14 @@ const Contents = () => {
     }
   };
 
+  const handleAddContent = () => {
+    router.push(`/contents/add`);
+  };
+
+  // const handleEdit = (id: number) => {
+  //   router.push(`/contents/${id}`);
+  // };
+
   useEffect(() => {
     fetchContents();
   }, []);
@@ -26,6 +36,14 @@ const Contents = () => {
       <Header />
       <main>
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          <div className="mb-4">
+            <button
+              onClick={handleAddContent}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Tambah Content
+            </button>
+          </div>
           <div className="overflow-x-auto">
             <table className="table-auto min-w-full">
               <thead>
@@ -43,7 +61,7 @@ const Contents = () => {
                     <tr key={el.id} className="bg-white">
                       <td className="border px-4 py-2">{el.title}</td>
                       <td className="border px-4 py-2">
-                          <iframe src={el.url} />
+                        <iframe src={el.url} />
                       </td>
                       <td className="border px-4 py-2">
                         {el.url ? el.url : ""}
@@ -56,12 +74,12 @@ const Contents = () => {
                         >
                           <FaTrashCan />
                         </button>
-                        <button
+                        {/* <button
                           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
-                          // onClick={() => handleEdit(el.id)}
-                        >                                                                                        
+                          onClick={() => handleEdit(el.id)}
+                        >
                           <TfiPencilAlt />
-                        </button>
+                        </button> */}
                       </td>
                     </tr>
                   );
