@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "@/components/header";
 import { Device } from "../../../types/entities/Device";
+import { useRouter } from "next/router";
 
-const Dashboard = () => {
+const Devices = () => {
+  const router = useRouter();
   const [devices, setDevices] = useState<Device[]>([]);
 
   const fetchDevices = async () => {
@@ -15,6 +17,10 @@ const Dashboard = () => {
     }
   };
 
+  const handleAddDevice = () => {
+    router.push(`/devices/add`);
+  };
+
   useEffect(() => {
     fetchDevices();
   }, []);
@@ -24,6 +30,14 @@ const Dashboard = () => {
       <Header />
       <main>
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          <div className="mb-4">
+            <button
+              onClick={handleAddDevice}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Tambah Device
+            </button>
+          </div>
           <div className="overflow-x-auto">
             <table className="table-auto min-w-full">
               <thead>
@@ -76,4 +90,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Devices;

@@ -34,7 +34,7 @@ const api = {
         : ""
     }`,
 
-  layoutsPath: (endpoint?: string | number, param?: string ) =>
+  layoutsPath: (endpoint?: string | number, param?: string) =>
     `${baseAPI}/templates${
       endpoint && param
         ? `/${endpoint}?${param}`
@@ -45,8 +45,8 @@ const api = {
         : ""
     }`,
 
-  ownersPath: (endpoint?: string, param?: string) =>
-    `${baseAPI}/owners${
+  locationsPath: (endpoint?: string, param?: string) =>
+    `${baseAPI}/locations${
       endpoint && param
         ? `/${endpoint}?${param}`
         : endpoint
@@ -58,28 +58,6 @@ const api = {
 
   templatesPath: (endpoint?: string, param?: string) =>
     `${baseAPI}/templates${
-      endpoint && param
-        ? `/${endpoint}?${param}`
-        : endpoint
-        ? `/${endpoint}`
-        : param
-        ? `?${param}`
-        : ""
-    }`,
-
-  typesPath: (endpoint?: string, param?: string) =>
-    `${baseAPI}/types${
-      endpoint && param
-        ? `/${endpoint}?${param}`
-        : endpoint
-        ? `/${endpoint}`
-        : param
-        ? `?${param}`
-        : ""
-    }`,
-
-  usersPath: (endpoint?: string, param?: string) =>
-    `${baseAPI}/users${
       endpoint && param
         ? `/${endpoint}?${param}`
         : endpoint

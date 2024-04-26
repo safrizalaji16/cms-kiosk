@@ -5,7 +5,7 @@ import axios from "axios";
 
 const Header = () => {
   const router = useRouter();
-  const [activeMenu, setActiveMenu] = useState("dashboard");
+  const [activeMenu, setActiveMenu] = useState("devices");
 
   const handleLogout = async () => {
     // TODO: handle logout
@@ -21,8 +21,8 @@ const Header = () => {
     // Mengatur menu aktif berdasarkan path saat ini
     const path = router.pathname.split("/")[1];
 
-    if (path === "dashboard") {
-      setActiveMenu("dashboard");
+    if (path === "devices") {
+      setActiveMenu("devices");
     } else if (path === "contents") {
       setActiveMenu("contents");
     } else {
@@ -33,8 +33,8 @@ const Header = () => {
   const handleMenuClick = (menu: string) => {
     setActiveMenu(menu);
     switch (menu) {
-      case "dashboard":
-        router.push("/dashboard");
+      case "devices":
+        router.push("/devices");
         break;
       case "layouts":
         router.push("/layouts");
@@ -57,11 +57,11 @@ const Header = () => {
           <nav className="space-x-4">
             <button
               className={`text-gray-900 hover:text-gray-700 focus:outline-none ${
-                activeMenu === "dashboard" ? "font-bold" : ""
+                activeMenu === "devices" ? "font-bold" : ""
               }`}
-              onClick={() => handleMenuClick("dashboard")}
+              onClick={() => handleMenuClick("devices")}
             >
-              Dashboard
+              Devices
             </button>
             <button
               className={`text-gray-900 hover:text-gray-700 focus:outline-none ${

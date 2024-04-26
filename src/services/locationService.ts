@@ -1,19 +1,19 @@
 // queries
 import type { AxiosError, AxiosResponse } from "axios";
 import type { QueryListResponse } from "../../types/axios/Response";
-import type { Device } from "../../types/entities/Device";
+import type { Location } from "../../types/entities/Location";
 import axios from "axios";
 import api from "@/constants/api";
 
-export const deviceService = {
+export const locationService = {
   // queries
-  getAllDevices: async (param: Record<string, unknown>, token?: string) => {
+  getAllLocations: async (param: Record<string, unknown>, token?: string) => {
     try {
-      const { data } = (await axios.get(api.devicesPath(), {
+      const { data } = (await axios.get(api.locationsPath(), {
         headers: {
           Authorization: `${token}`,
         },
-      })) as AxiosResponse<QueryListResponse<Device[]>, {}>;
+      })) as AxiosResponse<QueryListResponse<Location[]>, {}>;
 
       return data;
     } catch (e) {
@@ -21,24 +21,22 @@ export const deviceService = {
       throw null;
     }
   },
-  getDevice: async (id: string, token: string) => {
+  getLocation: async (id: string, token: string) => {
     try {
-      const { data } = (await axios.get(api.devicesPath(id), {
+      const { data } = (await axios.get(api.locationsPath(id), {
         headers: {
           Authorization: `${token}`,
         },
-      })) as AxiosResponse<QueryListResponse<Device>, {}>;
+      })) as AxiosResponse<QueryListResponse<Location>, {}>;
       return data;
     } catch (e) {
       console.log((e as AxiosError).request);
       throw null;
     }
   },
-  createDevice: async (param: Record<string, unknown>, token: string) => {
+  createLocation: async (param: Record<string, unknown>, token: string) => {
     try {
-      console.log(param, "loh loh");
-
-      const response = await axios.post(api.devicesPath(), param, {
+      const response = await axios.post(api.locationsPath(), param, {
         headers: {
           Authorization: `${token}`,
         },
@@ -49,14 +47,14 @@ export const deviceService = {
     }
   },
 
-  editDevice: async (
+  editLocation: async (
     id: string,
     param: Record<string, unknown>,
     token: string
   ) => {
     try {
-      const data = await axios.put<Device, AxiosResponse<Device>>(
-        api.devicesPath(id),
+      const data = await axios.put<Location, AxiosResponse<Location>>(
+        api.locationsPath(id),
         param,
         {
           headers: {

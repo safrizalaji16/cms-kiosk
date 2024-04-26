@@ -4,7 +4,11 @@ import { cookieName } from "./constants/api/config";
 export default async function middleware(req: NextRequest) {
   const { url } = req;
 
-  if (url.includes("/dashboard") || url.includes("/layouts") || url.includes("/contents")) {
+  if (
+    url.includes("/devices") ||
+    url.includes("/layouts") ||
+    url.includes("/contents")
+  ) {
     const userCookie = req.cookies.get(cookieName)?.value;
 
     if (!userCookie) {

@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-
-import { deviceService } from "@/services/deviceService";
+import { locationService } from "@/services/locationService";
 import { cookieName } from "@/constants/api/config";
-import { NextRequest } from "next/server";
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,18 +10,16 @@ export default async function handler(
 
   const currentCookies = cookies[cookieName];
 
-  if (!currentCookies) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
   try {
     if (req.method === "GET") {
-      const { data } = await deviceService.getAllDevices(query, currentCookies);
-
+      const { data } = await locationService.getAllLocations(
+        query,
+        currentCookies
+      );
       return res.status(200).json(data);
     }
     if (req.method === "POST") {
-      const { data } = await deviceService.createDevice(
+      const { data } = await locationService.createLocation(
         req.body,
         currentCookies
       );

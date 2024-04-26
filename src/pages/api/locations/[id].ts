@@ -1,15 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-
-import { deviceService } from "@/services/deviceService";
+import { locationService } from "@/services/locationService";
 import { cookieName } from "@/constants/api/config";
-import { NextRequest } from "next/server";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { query, cookies } = req;
-
+  const id = req.query.id as string;
   const currentCookies = cookies[cookieName];
 
   if (!currentCookies) {
@@ -18,12 +16,12 @@ export default async function handler(
 
   try {
     if (req.method === "GET") {
-      const { data } = await deviceService.getAllDevices(query, currentCookies);
-
+      const { data } = await locationService.getLocation(id, currentCookies);
       return res.status(200).json(data);
     }
-    if (req.method === "POST") {
-      const { data } = await deviceService.createDevice(
+    if (req.method === "PUT") {
+      const { data } = await locationService.editLocation(
+        id,
         req.body,
         currentCookies
       );
@@ -33,6 +31,7 @@ export default async function handler(
 
     return res.status(405).json("Method not allowed");
   } catch (e) {
+    console.log(e);
     if (e) {
       return res.status(e.code).json(e.message);
     }
