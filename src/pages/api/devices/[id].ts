@@ -21,6 +21,15 @@ export default async function handler(
 
       return res.status(200).json(data);
     }
+    if (req.method === "PUT") {
+      const { data }: any = await deviceService.editDevice(
+        id,
+        req.body,
+        currentCookies
+      );
+
+      return res.status(201).json(data);
+    }
 
     return res.status(405).json("Method not allowed");
   } catch (e) {

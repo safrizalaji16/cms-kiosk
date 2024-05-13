@@ -3,7 +3,6 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Header from "@/components/header";
 import { addCSSRulesToHTML } from "@/helpers/addCSSRulesToHTML";
-import WebBuilder from "@/components/grapejs/webBuilder";
 import { extractHTML } from "@/helpers/extractHTML";
 
 const LayoutForm = () => {
@@ -179,9 +178,6 @@ const LayoutForm = () => {
             </button>
           </div>
         </form>
-        <div className="flex-1 mb-4">
-          <WebBuilder code={htmlCode || ""} />
-        </div>
       </main>
     </div>
   );

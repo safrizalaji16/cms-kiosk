@@ -21,6 +21,10 @@ const Dashboard = () => {
     router.push(`/dashboard/add`);
   };
 
+  const handleEdit = (id: string) => {
+    router.push(`/devices/${id}`);
+  };
+
   useEffect(() => {
     fetchDevices();
   }, []);
@@ -48,6 +52,7 @@ const Dashboard = () => {
                   <th className="px-4 py-2">Status</th>
                   <th className="px-4 py-2">Last online</th>
                   <th className="px-4 py-2">Last offline</th>
+                  <th className="px-4 py-2">Layout ID</th>
                   <th className="px-4 py-2">Actions</th>
                 </tr>
               </thead>
@@ -71,8 +76,12 @@ const Dashboard = () => {
                           ? el.lastOffline.toString()
                           : "belum pernah offline"}
                       </td>
+                      <td className="border px-4 py-2">{el.usedLayout}</td>
                       <td className="border px-4 py-2">
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <button
+                          onClick={() => handleEdit(el.id)}
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        >
                           Edit
                         </button>
                       </td>

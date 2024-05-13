@@ -73,7 +73,7 @@ const DeviceForm = () => {
     setDeviceId("");
     setLocationId("");
     setTemplateId("");
-    router.push(`/devices`);
+    router.push(`/dashboard`);
   };
 
   useEffect(() => {

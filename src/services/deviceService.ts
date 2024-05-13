@@ -53,7 +53,7 @@ export const deviceService = {
     token: string
   ) => {
     try {
-      const data = await axios.put<Device, AxiosResponse<Device>>(
+      const { data } = await axios.put<Device, AxiosResponse<Device>>(
         api.devicesPath(id),
         param,
         {

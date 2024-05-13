@@ -5,6 +5,7 @@ export interface Device {
   lastOnline: Date;
   lastOffline: Date;
   instalationDate: Date;
+  usedLayout: number;
   templateId: number;
   locationId: number;
   updatedAt: Date;

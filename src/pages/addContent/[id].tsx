@@ -38,19 +38,11 @@ const ContentForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let contentIds = [];
 
     try {
-      const { data: cookie }: any = await axios.options(
-        "/api/auth/get-cookies"
-      );
-
-      let contentIds = [];
-
       if (!content1.contentId) {
-        const { data: data1 } = await contentService.createContent(
-          content1,
-          cookie
-        );
+        const data1 = await postContent(content1);
         if (data1) {
           contentIds.push(data1.id);
           setContent1({
@@ -66,10 +58,7 @@ const ContentForm = () => {
 
       if (!content2.contentId) {
         if (template && Number(template.totalContents) > 1) {
-          const { data: data2 } = await contentService.createContent(
-            content2,
-            cookie
-          );
+          const data2 = await postContent(content2);
           if (data2) {
             contentIds.push(data2.id);
             setContent2({
@@ -86,10 +75,7 @@ const ContentForm = () => {
 
       if (!content3.contentId) {
         if (template && Number(template.totalContents) > 2) {
-          const { data: data3 } = await contentService.createContent(
-            content3,
-            cookie
-          );
+          const data3 = await postContent(content3);
           if (data3) {
             contentIds.push(data3.id);
             setContent3({
@@ -106,10 +92,7 @@ const ContentForm = () => {
 
       if (!content4.contentId) {
         if (template && Number(template.totalContents) > 3) {
-          const { data: data4 } = await contentService.createContent(
-            content4,
-            cookie
-          );
+          const data4 = await postContent(content4);
           if (data4) {
             contentIds.push(data4.id);
             setContent4({
@@ -124,24 +107,41 @@ const ContentForm = () => {
         contentIds.push(Number(content4.contentId));
       }
 
-      const { data } = await axios.post(`/api/layouts`, {
+      const { data: layout } = await axios.post(`/api/layouts`, {
         contentIds,
         templateId: Number(templateId),
         deviceId,
       });
 
-      if (data) {
-        router.push(`/contents`);
+      if (layout) {
+        const { data } = await axios.put(`/api/devices/${deviceId}`, {
+          usedLayout: layout.id,
+        });
+
+        setDevice(data);
+
+        router.push(`/dashboard`);
       }
     } catch (error) {
       console.error("Error adding content:", error);
     }
   };
 
+  const postContent = async (payload: any) => {
+    try {
+      const { data: cookie }: any = await axios.options(
+        "/api/auth/get-cookies"
+      );
+      const { data } = await contentService.createContent(payload, cookie);
+
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const fetchDevice = async (id: string) => {
     try {
       const { data } = await axios.get(`/api/devices/${id}`);
-      console.log(data, "ASFASF");
 
       setDevice(data);
     } catch (error) {
