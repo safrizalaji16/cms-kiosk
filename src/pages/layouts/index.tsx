@@ -3,15 +3,16 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Header from "@/components/header";
 import { truncateString } from "@/helpers/truncateString";
-import { Layout } from "../../../types/entities/Layout";
+import type { Layouts as LayoutsType } from "../../../types/entities/Layout";
 
 const Layouts = () => {
   const router = useRouter();
-  const [layouts, setLayouts] = useState<Layout[]>([]);
+  const [layouts, setLayouts] = useState<LayoutsType>([]);
 
   const fetchLayouts = async () => {
     try {
       const { data } = await axios.get(`api/layouts`);
+
       setLayouts(data);
     } catch (error) {
       console.log(error);
@@ -33,7 +34,7 @@ const Layouts = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
-      <main>
+      {/* <main>
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="mb-4">
             <button
@@ -50,8 +51,7 @@ const Layouts = () => {
                   <th className="px-4 py-2">ID</th>
                   <th className="px-4 py-2">Name</th>
                   <th className="px-4 py-2">Code</th>
-                  <th className="px-4 py-2">Actions</th>{" "}
-                  {/* Added Actions column */}
+                  <th className="px-4 py-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -78,7 +78,7 @@ const Layouts = () => {
             </table>
           </div>
         </div>
-      </main>
+      </main> */}
     </div>
   );
 };

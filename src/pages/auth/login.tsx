@@ -17,7 +17,6 @@ export default function Login() {
         if (data) {
           router.push("/");
         }
-        console.log(data);
     } catch (e) {
       console.log(e);
     }

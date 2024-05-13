@@ -1,7 +1,7 @@
 // queries
 import type { AxiosError, AxiosResponse } from "axios";
 import type { QueryListResponse } from "../../types/axios/Response";
-import type { Layout } from "../../types/entities/Layout";
+import type { Layout, Layouts } from "../../types/entities/Layout";
 import axios from "axios";
 import api from "@/constants/api";
 
@@ -13,7 +13,7 @@ export const layoutService = {
         headers: {
           Authorization: `${token}`,
         },
-      })) as AxiosResponse<QueryListResponse<Layout[]>, {}>;
+      })) as AxiosResponse<QueryListResponse<Layouts>, {}>;
 
       return data;
     } catch (e) {
@@ -36,12 +36,12 @@ export const layoutService = {
   },
   createLayout: async (param: Record<string, unknown>, token: string) => {
     try {
-      const response = await axios.post(api.layoutsPath(), param, {
+      const { data } = await axios.post(api.layoutsPath(), param, {
         headers: {
           Authorization: `${token}`,
         },
       });
-      return response;
+      return data;
     } catch (e) {
       console.log(e);
     }

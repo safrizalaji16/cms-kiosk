@@ -1,19 +1,19 @@
 // queries
 import type { AxiosError, AxiosResponse } from "axios";
 import type { QueryListResponse } from "../../types/axios/Response";
-import type { Location, Locations } from "../../types/entities/Location";
+import type { Template, Templates } from "../../types/entities/Template";
 import axios from "axios";
 import api from "@/constants/api";
 
-export const locationService = {
+export const templateService = {
   // queries
-  getAllLocations: async (param: Record<string, unknown>, token?: string) => {
+  getAllTemplates: async (param: Record<string, unknown>, token?: string) => {
     try {
-      const { data } = (await axios.get(api.locationsPath(), {
+      const { data } = (await axios.get(api.templatesPath(), {
         headers: {
           Authorization: `${token}`,
         },
-      })) as AxiosResponse<QueryListResponse<Locations>, {}>;
+      })) as AxiosResponse<QueryListResponse<Templates>, {}>;
 
       return data;
     } catch (e) {
@@ -21,22 +21,22 @@ export const locationService = {
       throw null;
     }
   },
-  getLocation: async (id: string, token: string) => {
+  getTemplate: async (id: string, token: string) => {
     try {
-      const { data } = (await axios.get(api.locationsPath(id), {
+      const { data } = (await axios.get(api.templatesPath(id), {
         headers: {
           Authorization: `${token}`,
         },
-      })) as AxiosResponse<QueryListResponse<Location>, {}>;
+      })) as AxiosResponse<QueryListResponse<Template>, {}>;
       return data;
     } catch (e) {
       console.log((e as AxiosError).request);
       throw null;
     }
   },
-  createLocation: async (param: Record<string, unknown>, token: string) => {
+  createTemplate: async (param: Record<string, unknown>, token: string) => {
     try {
-      const response = await axios.post(api.locationsPath(), param, {
+      const response = await axios.post(api.templatesPath(), param, {
         headers: {
           Authorization: `${token}`,
         },
@@ -46,15 +46,14 @@ export const locationService = {
       console.log(e);
     }
   },
-
-  editLocation: async (
+  editTemplate: async (
     id: string,
     param: Record<string, unknown>,
     token: string
   ) => {
     try {
-      const data = await axios.put<Location, AxiosResponse<Location>>(
-        api.locationsPath(id),
+      const data = await axios.put<Template, AxiosResponse<Template>>(
+        api.templatesPath(id),
         param,
         {
           headers: {

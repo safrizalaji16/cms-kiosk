@@ -1,9 +1,8 @@
 // queries
 import type { AxiosError, AxiosResponse } from "axios";
 import type { QueryListResponse } from "../../types/axios/Response";
-import type { Content } from "../../types/entities/Content";
+import type { Content, Contents } from "../../types/entities/Content";
 import axios from "axios";
-import qs from "qs";
 import api from "@/constants/api";
 
 export const contentService = {
@@ -14,7 +13,7 @@ export const contentService = {
         headers: {
           Authorization: `${token}`,
         },
-      })) as AxiosResponse<QueryListResponse<Content[]>, {}>;
+      })) as AxiosResponse<QueryListResponse<Contents>, {}>;
 
       return data;
     } catch (e) {
@@ -38,14 +37,14 @@ export const contentService = {
   },
   createContent: async (param: Record<string, unknown>, token: string) => {
     try {
-      const response = await axios.post(api.contentsPath(), param, {
+      const { data } = await axios.post(api.contentsPath(), param, {
         headers: {
           Authorization: `${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
 
-      return response;
+      return data;
     } catch (e) {
       console.log(e);
     }

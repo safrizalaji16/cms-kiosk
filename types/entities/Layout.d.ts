@@ -1,9 +1,11 @@
 export interface Layout {
-  id: number,
-  name: string,
-  htmlCode: string,
-  updatedAt: Date,
-  createdAt: Date
+  id: number;
+  status: boolean;
+  templateId: number;
+  contentIds: number[];
+  deviceId: string;
+  updatedAt: Date;
+  createdAt: Date;
 }
 
 export type Layouts = Layout[];

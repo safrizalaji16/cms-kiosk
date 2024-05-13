@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-
 import { deviceService } from "@/services/deviceService";
 import { cookieName } from "@/constants/api/config";
-import { NextRequest } from "next/server";
 
 export default async function handler(
   req: NextApiRequest,

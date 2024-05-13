@@ -31,32 +31,21 @@ const DeviceForm = () => {
           id: deviceId,
           name,
           locationId: Number(locationId),
-          templateId: Number(templateId),
         });
-
         if (data) {
           setName("");
           setDeviceId("");
           setLocationId("");
           setTemplateId("");
-          router.push(`/devices`);
+          console.log(data, "ASFAS");
+
+          router.push(`/addContent/${templateId}-${data.id}`);
         }
       }
     } catch (error) {
       console.error("Error adding content:", error);
     }
   };
-
-  // const fetchContent = async (id: string | number) => {
-  //   try {
-  //     const { data } = await axios.get(`/api/templates/${id}`);
-
-  //     setTitle(data.title);
-  //     setFile(data.url);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const fetchLocations = async () => {
     try {
@@ -70,7 +59,7 @@ const DeviceForm = () => {
 
   const fetchTemplates = async () => {
     try {
-      const { data } = await axios.get("/api/layouts");
+      const { data } = await axios.get("/api/templates");
 
       setTemplates(data);
     } catch (error) {
@@ -98,10 +87,10 @@ const DeviceForm = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
-      <main className="m-4">
+      <main className="m-4 flex flex-col items-center justify-center w-full h-full">
         <form
           onSubmit={handleSubmit}
-          className="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mr-4"
+          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mr-4 w-full max-w-lg"
         >
           <div className="mb-4">
             <label
@@ -165,26 +154,31 @@ const DeviceForm = () => {
             >
               Template:
             </label>
-            <select
-              id="template"
-              value={templateId}
-              onChange={(e) => setTemplateId(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            >
-              <option value="">-- Pilih Template --</option>
+            <div className="grid grid-cols-3 gap-2">
               {templates.map((t: any) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
-                </option>
+                <label
+                  key={t.id}
+                  className={`flex items-center cursor-pointer ml-4`}
+                >
+                  <input
+                    type="radio"
+                    name="templateId"
+                    value={t.id}
+                    className="form-radio"
+                    onChange={(e) => setTemplateId(e.target.value)}
+                  />
+                  <img src={t.coverImage} alt={t.name} className="h-24" />
+                </label>
               ))}
-            </select>
+            </div>
           </div>
+
           <div>
             <button
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
             >
-              {Number(id) ? "Edit Content" : "Add Content"}
+              {Number(id) ? "Edit Content" : "Next"}
             </button>
             <button
               onClick={handleCancel}

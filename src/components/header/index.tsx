@@ -5,7 +5,7 @@ import axios from "axios";
 
 const Header = () => {
   const router = useRouter();
-  const [activeMenu, setActiveMenu] = useState("devices");
+  const [activeMenu, setActiveMenu] = useState("dashboard");
 
   const handleLogout = async () => {
     // TODO: handle logout
@@ -21,7 +21,9 @@ const Header = () => {
     // Mengatur menu aktif berdasarkan path saat ini
     const path = router.pathname.split("/")[1];
 
-    if (path === "devices") {
+    if (path === "dashboard") {
+      setActiveMenu("dashboard");
+    } else if (path === "devices") {
       setActiveMenu("devices");
     } else if (path === "contents") {
       setActiveMenu("contents");
@@ -33,6 +35,9 @@ const Header = () => {
   const handleMenuClick = (menu: string) => {
     setActiveMenu(menu);
     switch (menu) {
+      case "dashboard":
+        router.push("/dashboard");
+        break;
       case "devices":
         router.push("/devices");
         break;
@@ -55,6 +60,14 @@ const Header = () => {
             {capitalizeFirstLetter(activeMenu)}
           </h1>
           <nav className="space-x-4">
+            {/* <button
+              className={`text-gray-900 hover:text-gray-700 focus:outline-none ${
+                activeMenu === "dashboard" ? "font-bold" : ""
+              }`}
+              onClick={() => handleMenuClick("dashboard")}
+            >
+              Dashboard
+            </button>
             <button
               className={`text-gray-900 hover:text-gray-700 focus:outline-none ${
                 activeMenu === "devices" ? "font-bold" : ""
@@ -78,7 +91,7 @@ const Header = () => {
               onClick={() => handleMenuClick("contents")}
             >
               Contents
-            </button>
+            </button> */}
             <button
               className="text-gray-900 hover:text-gray-700 focus:outline-none"
               onClick={handleLogout}

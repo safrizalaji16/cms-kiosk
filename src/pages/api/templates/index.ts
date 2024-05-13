@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { cookieName } from "@/constants/api/config";
-import { layoutService } from "@/services/layoutService";
+import { templateService } from "@/services/templateService";
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,12 +16,15 @@ export default async function handler(
 
   try {
     if (req.method === "GET") {
-      const { data } = await layoutService.getAllLayouts(query, currentCookies);
+      const { data } = await templateService.getAllTemplates(
+        query,
+        currentCookies
+      );
 
       return res.status(200).json(data);
     }
     if (req.method === "POST") {
-      const { data } = await layoutService.createLayout(
+      const { data } = await templateService.createTemplate(
         req.body,
         currentCookies
       );

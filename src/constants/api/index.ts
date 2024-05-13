@@ -35,7 +35,7 @@ const api = {
     }`,
 
   layoutsPath: (endpoint?: string | number, param?: string) =>
-    `${baseAPI}/templates${
+    `${baseAPI}/layouts${
       endpoint && param
         ? `/${endpoint}?${param}`
         : endpoint

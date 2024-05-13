@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { templateService } from "@/services/templateService";
 import { cookieName } from "@/constants/api/config";
-import { layoutService } from "@/services/layoutService";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { query, cookies } = req;
-
+  const id = req.query.id as string;
   const currentCookies = cookies[cookieName];
 
   if (!currentCookies) {
@@ -16,12 +16,12 @@ export default async function handler(
 
   try {
     if (req.method === "GET") {
-      const { data } = await layoutService.getAllLayouts(query, currentCookies);
-
+      const { data } = await templateService.getTemplate(id, currentCookies);
       return res.status(200).json(data);
     }
-    if (req.method === "POST") {
-      const { data } = await layoutService.createLayout(
+    if (req.method === "PUT") {
+      const { data } = await templateService.editTemplate(
+        id,
         req.body,
         currentCookies
       );
@@ -31,6 +31,7 @@ export default async function handler(
 
     return res.status(405).json("Method not allowed");
   } catch (e) {
+    console.log(e);
     if (e) {
       return res.status(e.code).json(e.message);
     }

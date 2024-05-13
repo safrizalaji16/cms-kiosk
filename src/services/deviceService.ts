@@ -1,7 +1,7 @@
 // queries
 import type { AxiosError, AxiosResponse } from "axios";
 import type { QueryListResponse } from "../../types/axios/Response";
-import type { Device } from "../../types/entities/Device";
+import type { Device, Devices } from "../../types/entities/Device";
 import axios from "axios";
 import api from "@/constants/api";
 
@@ -13,7 +13,7 @@ export const deviceService = {
         headers: {
           Authorization: `${token}`,
         },
-      })) as AxiosResponse<QueryListResponse<Device[]>, {}>;
+      })) as AxiosResponse<QueryListResponse<Devices>, {}>;
 
       return data;
     } catch (e) {
@@ -36,14 +36,12 @@ export const deviceService = {
   },
   createDevice: async (param: Record<string, unknown>, token: string) => {
     try {
-      console.log(param, "loh loh");
-
-      const response = await axios.post(api.devicesPath(), param, {
+      const { data } = await axios.post(api.devicesPath(), param, {
         headers: {
           Authorization: `${token}`,
         },
       });
-      return response;
+      return data;
     } catch (e) {
       console.log(e);
     }

@@ -10,12 +10,17 @@ export default async function handler(
 
   const currentCookies = cookies[cookieName];
 
+  if (!currentCookies) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
   try {
     if (req.method === "GET") {
       const { data } = await locationService.getAllLocations(
         query,
         currentCookies
       );
+
       return res.status(200).json(data);
     }
     if (req.method === "POST") {
