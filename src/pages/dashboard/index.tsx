@@ -22,7 +22,7 @@ const Dashboard = () => {
   };
 
   const handleEdit = (id: string) => {
-    router.push(`/devices/${id}`);
+    router.push(`/dashboard/${id}`);
   };
 
   useEffect(() => {

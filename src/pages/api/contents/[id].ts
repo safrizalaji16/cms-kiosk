@@ -22,7 +22,6 @@ export default async function handler(
 
     return res.status(405).json("Method not allowed");
   } catch (e) {
-    console.log(e);
     if (e) {
       return res.status(e.code).json(e.message);
     }

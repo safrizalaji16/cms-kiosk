@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Header from "@/components/header";
-import { contentService } from "@/services/contentService";
 
 const DeviceForm = () => {
   const router = useRouter();
   const { id } = router.query;
   const [name, setName] = useState("");
   const [deviceId, setDeviceId] = useState("");
+  const [layoutId, setLayoutId] = useState("");
+  const [layouts, setLayouts] = useState([]);
+  const [newLayout, setNewLayout] = useState(true);
   const [locations, setLocations] = useState([]);
   const [locationId, setLocationId] = useState("");
   const [templates, setTemplates] = useState([]);
@@ -18,14 +20,20 @@ const DeviceForm = () => {
     e.preventDefault();
 
     try {
-      if (Number(id)) {
-        // const { data } = await axios.post(`/api/devices${id}`, {
-        //   name: title,
-        // });
-        // if (data) {
-        //   setTitle("");
-        //   router.push(`/contents`);
-        // }
+      if (id !== "add") {
+        const { data } = await axios.put(`/api/devices/${id}`, {
+          name,
+          locationId: Number(locationId),
+          usedLayout: Number(layoutId),
+        });
+        if (data) {
+          setName("");
+          setDeviceId("");
+          setLocationId("");
+          setTemplateId("");
+
+          router.push(`/dashboard`);
+        }
       } else {
         const { data } = await axios.post("/api/devices", {
           id: deviceId,
@@ -37,7 +45,6 @@ const DeviceForm = () => {
           setDeviceId("");
           setLocationId("");
           setTemplateId("");
-          console.log(data, "ASFAS");
 
           router.push(`/addContent/${templateId}-${data.id}`);
         }
@@ -67,21 +74,39 @@ const DeviceForm = () => {
     }
   };
 
+  const fetchDevice = async (id: string) => {
+    try {
+      const { data } = await axios.get(`/api/devices/${id}`);
+
+      setLayoutId(data.usedLayout);
+      setLayouts([...data.layouts, { id: 1 }]);
+      setDeviceId(data.id);
+      setName(data.name);
+      setLocationId(data.locationId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleCancel = (e) => {
     e.preventDefault();
     setName("");
     setDeviceId("");
     setLocationId("");
     setTemplateId("");
+    setLayoutId("");
+    setNewLayout(false);
+
     router.push(`/dashboard`);
   };
 
   useEffect(() => {
     fetchLocations();
     fetchTemplates();
-    // if (id && id !== "add") {
-    //   fetchContent(id as string);
-    // }
+    if (id && id !== "add") {
+      fetchDevice(id as string);
+      setNewLayout(false);
+    }
   }, [id]);
 
   return (
@@ -107,6 +132,7 @@ const DeviceForm = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               placeholder="Enter a short name"
               required
+              disabled={id === "add" ? false : true}
             />
           </div>
           <div className="mb-4">
@@ -147,38 +173,73 @@ const DeviceForm = () => {
               ))}
             </select>
           </div>
-          <div className="mb-4">
-            <label
-              htmlFor="template"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              Template:
-            </label>
-            <div className="grid grid-cols-3 gap-2">
-              {templates.map((t: any) => (
-                <label
-                  key={t.id}
-                  className={`flex items-center cursor-pointer ml-4`}
+          {id !== "add" && (
+            <div className="mb-4">
+              <label
+                htmlFor="layout"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Layout:
+              </label>
+              <div className="flex">
+                <select
+                  id="layout"
+                  value={layoutId}
+                  onChange={(e) => setLayoutId(e.target.value)}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  disabled={newLayout}
                 >
-                  <input
-                    type="radio"
-                    name="templateId"
-                    value={t.id}
-                    className="form-radio"
-                    onChange={(e) => setTemplateId(e.target.value)}
-                  />
-                  <img src={t.coverImage} alt={t.name} className="h-24" />
-                </label>
-              ))}
+                  <option value="">-- Pilih Layout --</option>
+                  {layouts.map((l: any) => (
+                    <option key={l.id} value={l.id}>
+                      {l.id}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={() => setNewLayout(!newLayout)}
+                  className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ml-2"
+                >
+                  {newLayout ? "Pilih Layout" : "Buat Layout"}
+                </button>
+              </div>
             </div>
-          </div>
+          )}
+          {newLayout && (
+            <div className="mb-4">
+              <label
+                htmlFor="template"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Template:
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                {templates.map((t: any) => (
+                  <label
+                    key={t.id}
+                    className={`flex items-center cursor-pointer ml-4`}
+                  >
+                    <input
+                      type="radio"
+                      name="templateId"
+                      value={t.id}
+                      className="form-radio"
+                      onChange={(e) => setTemplateId(e.target.value)}
+                    />
+                    <img src={t.coverImage} alt={t.name} className="h-24" />
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div>
             <button
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
             >
-              {Number(id) ? "Edit Content" : "Next"}
+              {id !== "add" ? "Edit Device" : "Next"}
             </button>
             <button
               onClick={handleCancel}

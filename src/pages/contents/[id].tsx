@@ -35,7 +35,7 @@ const ContentForm = () => {
         // }
       } else {
         const data = await contentService.createContent(
-          { name: title, file, templateId },
+          { title, file, templateId },
           cookie
         );
 
