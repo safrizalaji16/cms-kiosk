@@ -5,6 +5,7 @@ export default async function middleware(req: NextRequest) {
   const { url } = req;
 
   if (
+    url.includes("/dashboard") ||
     url.includes("/devices") ||
     url.includes("/layouts") ||
     url.includes("/contents")

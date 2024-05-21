@@ -1,22 +1,22 @@
-import { authService } from "@/services/authService";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Login() {
-    const router = useRouter();
+  const router = useRouter();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
       const data = await axios.post("/api/auth/login", {
         username,
         password,
-      })
-        if (data) {
-          router.push("/");
-        }
+      });
+      if (data) {
+        router.push("/dashboard");
+      }
     } catch (e) {
       console.log(e);
     }
